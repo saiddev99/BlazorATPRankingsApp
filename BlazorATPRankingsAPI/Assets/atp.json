@@ -1,0 +1,27 @@
+[
+    {
+        "player": "Novak Djokovic",
+        "country": "Serbia",
+        "points": 11045
+    },
+    {
+        "player": "Carlos Alcaraz",
+        "country": "Spain",
+        "points": 8535
+    },
+    {
+        "player": "Daniil Medvedev",
+        "country": "Russia",
+        "points": 7280
+    },
+    {
+        "player": "Holger Rune",
+        "country": "Denmark",
+        "points": 4760
+    },
+    {
+      "player": "Andrey Rublev",
+      "country": "Russia",
+      "points": 4695
+    }
+]
