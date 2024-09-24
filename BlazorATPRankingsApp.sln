@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorATPRankings.Client", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorATPRankingsAPI", "BlazorATPRankingsAPI\BlazorATPRankingsAPI.csproj", "{DCB96D70-7EAC-4FF0-BDE9-7BB6E060C5B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorATPRankings.Models", "BlazorATPRankings.Models\BlazorATPRankings.Models.csproj", "{A4A8BC99-A1B5-4B1B-9EA3-8FD1CD97174A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorATPRankings.Models", "BlazorATPRankings.Models\BlazorATPRankings.Models.csproj", "{A4A8BC99-A1B5-4B1B-9EA3-8FD1CD97174A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

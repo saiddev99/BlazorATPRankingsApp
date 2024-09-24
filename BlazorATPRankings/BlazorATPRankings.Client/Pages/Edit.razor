@@ -1,0 +1,63 @@
+﻿@page "/edit/{id:int}"
+
+@inject NavigationManager navmanager
+@inject PlayerService playerservice
+
+<h3>@player.Name details!</h3>
+
+<EditForm Model="player">
+    <div class="row my-3">
+        <label for="id" class="col-sm-2 col-form-label">
+            id:
+        </label>
+        <div class="col-sm-6">
+            <InputNumber id="id" class="form-control"
+                       @bind-Value="player.Id" disabled/>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <label for="name" class="col-sm-2 col-form-label">
+            name:
+        </label>
+        <div class="col-sm-6">
+            <InputText id="name" class="form-control"
+                       @bind-Value="player.Name" />
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <label for="country" class="col-sm-2 col-form-label">
+            country:
+        </label>
+        <div class="col-sm-6">
+            <InputNumber id="country" class="form-control"
+                         @bind-Value="player.Country" />
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <label for="points" class="col-sm-2 col-form-label">
+            points:
+        </label>
+        <div class="col-sm-6">
+            <InputNumber id="points" class="form-control"
+                         @bind-Value="player.Points" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set;}
+    public Player player { get; set; } = new Player();
+
+    /*private PlayerViewModel playerViewModel { get; set; }*/
+
+    protected async override Task OnInitializedAsync()
+    {
+        player = await playerservice.GetPlayer(id);
+    }
+}

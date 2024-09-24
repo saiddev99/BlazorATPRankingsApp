@@ -34,12 +34,12 @@ public class PlayerService: IPlayerService
         Player playertoAdd = new()
         {
             Id = playerData.Max(x => x.Id) + 1,
-            Rank = playerData.OrderByDescending(x => x.Points).FirstOrDefault(x => player.Points >= x.Points).Rank,
+            Rank = playerData.OrderBy(x => x.Rank).First(x => player.Points >= x.Points).Rank,
             Name = player.Name,
             Country = player.Country,
             Points = player.Points
         };       
-        playerData.OrderByDescending(x => x.Points).Where(x => (player.Points >= x.Points && player.Id != x.Id)).ToList().ForEach(x => ++x.Rank);
+        playerData.OrderBy(x => x.Rank).Where(x => (player.Points >= x.Points)).ToList().ForEach(x => ++x.Rank);
         playerData.Add(playertoAdd);
         return playertoAdd;
     }
@@ -70,7 +70,7 @@ public class PlayerService: IPlayerService
         if (result != null)
         {
             playerData.Remove(result);
-            playerData.OrderByDescending(x => x.Points).Where(x => (result.Points >= x.Points && result.Id != x.Id)).ToList().ForEach(x => --x.Rank);
+            playerData.OrderBy(x => x.Rank).Where(x => (result.Rank <= x.Rank)).ToList().ForEach(x => --x.Rank);
             return result;
         }
         return null;

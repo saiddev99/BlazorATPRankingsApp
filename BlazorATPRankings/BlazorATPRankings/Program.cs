@@ -1,4 +1,5 @@
 using BlazorATPRankings.Client.Pages;
+using BlazorATPRankings.Client.Services;
 using BlazorATPRankings.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddHttpClient<PlayerService>(client => {
+    client.BaseAddress = new Uri("https://localhost:7030/");
+});
 
 var app = builder.Build();
 

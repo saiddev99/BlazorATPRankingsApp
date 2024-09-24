@@ -1,11 +1,47 @@
 ﻿@page "/players"
 @inject NavigationManager navmanager
+@inject PlayerService PlayerService
 
-<h3>Players</h3>
+<h1>Players</h1>
+<button class="button btn btn-outline-primary" @onclick="showhidePage">@(showhide ? "Show AddForm" : "Hide AddForm")</button>
+<EditForm hidden="@showhide" Model="player" OnValidSubmit="SavePlayer">
+    <div class="row my-3">
+        <label for="name" class="col-sm-2 col-form-label">
+            Player name
+        </label>
+        <div class="col-sm-6">
+            <InputText id="name" class="form-control"
+                       @bind-Value="player.Name" />
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <label for="country" class="col-sm-2 col-form-label">
+            Country
+        </label>
+        <div class="col-sm-6">
+            <InputText id="country" class="form-control"
+                       @bind-Value="player.Country" />
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <label for="points" class="col-sm-2 col-form-label">
+            Points
+        </label>
+        <div class="col-sm-6">
+            <InputNumber id="points" class="form-control"
+                       @bind-Value="player.Points" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+</EditForm>
 
 <table class="table">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Rank</th>
             <th>Name</th>
             <th>County</th>
@@ -17,8 +53,9 @@
         @foreach (var x in PlayersList)
         {
             <tr>
+                <td>@x.Id</td>
                 <td>@x.Rank</td>
-                <td>@x.Name</td>
+                <td><a href ="edit/@x.Id">@x.Name</a></td>
                 <td>@x.Country</td>
                 <td>@x.Points</td>
                 <td>
@@ -34,8 +71,8 @@
 </table>
 
 @code {
-    [Inject]
-    public PlayerService PlayerService { get; set; }
+    public PlayerViewModel player { get; set; } = new PlayerViewModel();
+
     public List<Player> PlayersList { get; set; } = new List<Player>();
 
     protected override async Task OnInitializedAsync()
@@ -46,6 +83,19 @@
     private async Task DeletePlayer(int id)
     {
         await PlayerService.DeletePlayer(id);
-        navmanager.Refresh();
+        PlayersList = (await PlayerService.GetPlayers()).ToList();
+    }
+
+    private bool showhide = true;
+
+    private void showhidePage()
+    {
+        showhide = !showhide;
+    }
+
+    private async Task SavePlayer()
+    {
+        await PlayerService.AddPlayer(player);
+        PlayersList = (await PlayerService.GetPlayers()).ToList();
     }
 }

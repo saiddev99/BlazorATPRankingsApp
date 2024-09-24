@@ -10,10 +10,10 @@ public class Player
     public int Rank { get; set; }
 
     [JsonPropertyName("player")]
-    public required string Name { get; set; }
+    public string Name { get; set; }
 
     [JsonPropertyName("country")]
-    public required string Country { get; set; }
+    public string Country { get; set; }
 
     [JsonPropertyName("points")]
     public int Points { get; set; }
