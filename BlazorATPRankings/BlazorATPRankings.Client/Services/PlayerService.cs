@@ -25,7 +25,7 @@ public class PlayerService
         return JsonSerializer.Deserialize<List<Player>>(players, options);
     }
 
-    public async Task DeleteContact(int id)
+    public async Task DeletePlayer(int id)
     {
         await httpClient.DeleteAsync($"/delete/{id}");
     }

@@ -1,4 +1,5 @@
-﻿using BlazorATPRankingsAPI.Models;
+﻿using BlazorATPRankingsAPI.DTO;
+using BlazorATPRankingsAPI.Models;
 using BlazorATPRankingsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Channels;
@@ -28,7 +29,7 @@ public class PlayerController : ControllerBase
         }
     }
 
-    [HttpGet("Search")]
+    [HttpGet("search")]
     public ActionResult SearchPlayers(string name)
     {
         try
@@ -57,13 +58,13 @@ public class PlayerController : ControllerBase
         }
     }
 
-    [HttpPost("Add")]
-    public ActionResult<Player> AddPlayer(Player contact)
+    [HttpPost("add")]
+    public ActionResult<Player> AddPlayer(PlayerDTO player)
     {
         try
         {
-            var createdContact = _playerService.AddPlayer(contact);
-            return CreatedAtAction(nameof(AddPlayer), new { id = createdContact.Id }, createdContact);
+            var createdPlayer = _playerService.AddPlayer(player);
+            return CreatedAtAction(nameof(AddPlayer), new { id = createdPlayer.Id }, createdPlayer);
         }
         catch (Exception)
         {
@@ -73,7 +74,7 @@ public class PlayerController : ControllerBase
     }
 
     [HttpPut("edit/{id:int}")]
-    public ActionResult<Player> UpdatePlayer(int id, Player player)
+    public ActionResult<Player> UpdatePlayer(int id, PlayerDTO player)
     {
         try
         {
@@ -81,7 +82,7 @@ public class PlayerController : ControllerBase
 
             if (playerToUpdate == null)
             {
-                return NotFound($"Contact with id = {id} is not found");
+                return NotFound($"Player with id = {id} is not found");
             }
 
             return _playerService.UpdatePlayer(id, player);
@@ -94,16 +95,16 @@ public class PlayerController : ControllerBase
     }
 
     [HttpDelete("delete/{id:int}")]
-    public ActionResult<Player> DeleteContact(int id)
+    public ActionResult<Player> DeletePlayer(int id)
     {
         try
         {
-            var contactToDelete = _playerService.GetPlayer(id);
-            if (contactToDelete == null)
+            var playerToDelete = _playerService.GetPlayer(id);
+            if (playerToDelete == null)
             {
-                return NotFound($"Contact with id = {id} is not found");
+                return NotFound($"Player with id = {id} is not found");
             }
-            return _playerService.DeleteContact(id);
+            return _playerService.DeletePlayer(id);
         }
         catch (Exception)
         {

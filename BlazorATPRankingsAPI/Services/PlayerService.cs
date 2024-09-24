@@ -1,4 +1,5 @@
-﻿using BlazorATPRankingsAPI.Models;
+﻿using BlazorATPRankingsAPI.DTO;
+using BlazorATPRankingsAPI.Models;
 using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -28,17 +29,22 @@ public class PlayerService: IPlayerService
         return playerData.FirstOrDefault(x => x.Id == id);
     }
 
-    Player IPlayerService.AddPlayer(Player player)
+    Player IPlayerService.AddPlayer(PlayerDTO player)
     {
-        player.Id = playerData.Max(x => x.Id) + 1;
-        player.Rank = playerData.OrderByDescending(x => x.Points).FirstOrDefault(x => player.Points >= x.Points).Rank;
+        Player playertoAdd = new()
+        {
+            Id = playerData.Max(x => x.Id) + 1,
+            Rank = playerData.OrderByDescending(x => x.Points).FirstOrDefault(x => player.Points >= x.Points).Rank,
+            Name = player.Name,
+            Country = player.Country,
+            Points = player.Points
+        };       
         playerData.OrderByDescending(x => x.Points).Where(x => (player.Points >= x.Points && player.Id != x.Id)).ToList().ForEach(x => ++x.Rank);
-
-        playerData.Add(player);
-        return player;
+        playerData.Add(playertoAdd);
+        return playertoAdd;
     }
 
-    Player IPlayerService.UpdatePlayer(int id, Player player)
+    Player IPlayerService.UpdatePlayer(int id, PlayerDTO player)
     {
         var result = playerData.FirstOrDefault(x => x.Id == id);
 
@@ -57,7 +63,7 @@ public class PlayerService: IPlayerService
         return null;
     }
 
-    Player IPlayerService.DeleteContact(int id)
+    Player IPlayerService.DeletePlayer(int id)
     {
         var result = playerData.FirstOrDefault(x => x.Id == id);
 
