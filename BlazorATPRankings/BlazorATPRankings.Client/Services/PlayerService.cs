@@ -26,14 +26,26 @@ public class PlayerService
         return JsonSerializer.Deserialize<List<Player>>(players, options);
     }
 
-    public async Task<Player> GetPlayer(int id)
+    public async Task<PlayerViewModel> GetPlayer(int id)
     {
         var player = await httpClient.GetStringAsync($"{id}");
         var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
-        return JsonSerializer.Deserialize<Player>(player, options);
+        return JsonSerializer.Deserialize<PlayerViewModel>(player, options);
+    }
+
+    public async Task<List<Player>> Search(string input)
+    {
+        var players = await httpClient.GetStringAsync($"/search?name={input}");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        return JsonSerializer.Deserialize<List<Player>>(players, options);
     }
 
 
@@ -54,5 +66,19 @@ public class PlayerService
         {
             return null;
         }    
+    }
+
+    public async Task<PlayerViewModel> UpdatePlayer(PlayerViewModel player, int id)
+    {
+        HttpResponseMessage message = await httpClient.PutAsJsonAsync<PlayerViewModel>($"edit/{id}", player);
+        
+        if (message.IsSuccessStatusCode)
+        {
+            return player;
+        }
+        else
+        {
+            return null;
+        }   
     }
 }

@@ -31,14 +31,26 @@ public class PlayerService: IPlayerService
 
     Player IPlayerService.AddPlayer(PlayerDTO player)
     {
+        int rank = 0;
+
+        if (playerData.OrderBy(x => x.Rank).FirstOrDefault(x => player.Points >= x.Points) == null)
+        {
+            rank = playerData.OrderBy(x => x.Rank).Last().Rank + 1;
+        }
+        else
+        {
+            rank = playerData.OrderBy(x => x.Rank).FirstOrDefault(x => player.Points >= x.Points).Rank;
+        }
+
+
         Player playertoAdd = new()
         {
             Id = playerData.Max(x => x.Id) + 1,
-            Rank = playerData.OrderBy(x => x.Rank).First(x => player.Points >= x.Points).Rank,
+            Rank = rank,
             Name = player.Name,
             Country = player.Country,
             Points = player.Points
-        };       
+        };
         playerData.OrderBy(x => x.Rank).Where(x => (player.Points >= x.Points)).ToList().ForEach(x => ++x.Rank);
         playerData.Add(playertoAdd);
         return playertoAdd;
@@ -48,15 +60,26 @@ public class PlayerService: IPlayerService
     {
         var result = playerData.FirstOrDefault(x => x.Id == id);
 
+        int rank = 0;
+
+        if (playerData.OrderBy(x => x.Rank).FirstOrDefault(x => player.Points >= x.Points) == null)
+        {
+            rank = playerData.OrderBy(x => x.Rank).Last().Rank;
+            playerData.OrderBy(x => x.Rank).Where(x => result.Points > x.Points).ToList().ForEach(x => --x.Rank);
+        }
+        else
+        {
+            rank = playerData.OrderBy(x => x.Rank).FirstOrDefault(x => player.Points >= x.Points).Rank;
+        }
+
         if (result != null)
         {
             result.Name = player.Name;
             result.Country = player.Country;
-            result.Rank = playerData.OrderByDescending(x => x.Points).FirstOrDefault(x => player.Points >= x.Points).Rank;
-            playerData.OrderByDescending(x => x.Points).Where(x => (player.Points >= x.Points && id != x.Id)).ToList().ForEach(x => ++x.Rank);
+            result.Rank = rank;
             result.Points = player.Points;
-        
 
+            playerData.OrderBy(x => x.Rank).Where(x => (result.Points >= x.Points && result.Id != x.Id)).ToList().ForEach(x => ++x.Rank);
             return result;
         }
 

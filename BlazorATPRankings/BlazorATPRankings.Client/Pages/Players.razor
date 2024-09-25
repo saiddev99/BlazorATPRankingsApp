@@ -41,7 +41,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Rank</th>
             <th>Name</th>
             <th>County</th>
@@ -53,7 +52,6 @@
         @foreach (var x in PlayersList)
         {
             <tr>
-                <td>@x.Id</td>
                 <td>@x.Rank</td>
                 <td><a href ="edit/@x.Id">@x.Name</a></td>
                 <td>@x.Country</td>

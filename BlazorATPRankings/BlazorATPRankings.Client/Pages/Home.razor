@@ -1,7 +1,60 @@
 ﻿@page "/"
+@inject PlayerService playerservice
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Top 3</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Top Players</h1>
 
-Welcome to your new app.
+<div>
+    <ol class="list-group list-group-numbered">
+        @foreach (var player in PlayersList)
+        {
+            <li class="list-group-item list-group-item-action">@player.Name</li>
+        }
+    </ol>
+</div>
+
+<br />
+
+<div class="mb-3">
+    <label class="form-label">Player Search</label><br />
+    <input class="form-control" type="text" @bind="@input" @bind:event="oninput" @onkeydown="@Enter" />
+</div>
+
+<div class="border border-success" hidden="@showhide" style="padding:1rem;">
+    @foreach (var result in SearchResult)
+    {
+        <p class="text-success"><a href ="edit/@result.Id">@result.Name</a></p>
+    }
+</div>
+
+@code
+{
+    public List<Player> PlayersList { get; set; } = new List<Player>();
+    public List<Player> SearchResult { get; set; } = new List<Player>();
+
+    private string? input;
+
+    protected override async Task OnInitializedAsync()
+    {
+        PlayersList = (await playerservice.GetPlayers()).Take(3).ToList();
+    }
+
+    public async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter")
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                showhide = true;
+            }
+            else
+            {
+                SearchResult = await playerservice.Search(input);
+                showhide = false;
+            }
+        }
+    }
+
+    private bool showhide = true;
+}
