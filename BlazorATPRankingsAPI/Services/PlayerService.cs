@@ -101,6 +101,6 @@ public class PlayerService: IPlayerService
 
     public List<Player> SearchPlayers(string name)
     {
-        return playerData.Where(x => x.Name.Contains(name)).ToList();
+        return playerData.Where(x => x.Name.ToLower().Contains(name)).ToList();
     }
 }
